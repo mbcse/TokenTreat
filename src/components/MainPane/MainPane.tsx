@@ -39,7 +39,7 @@ const MainPane: FC = () => {
       <Flex className={styles.content}>
         {/* <Status /> */}
 
-        {isConnected && (
+        {isConnected? (
           <>
             <Address />
 
@@ -58,7 +58,11 @@ const MainPane: FC = () => {
               <CreateTokenTreat />
             </Flex>
           </>
-        )}
+        ): (
+          <Text>Connect to a wallet to create a TokenTreat</Text>
+        )
+        
+        }
       </Flex>
     </Box>
   );
