@@ -1,133 +1,130 @@
-require('dotenv').config()
+require("dotenv").config();
 
-require('@nomiclabs/hardhat-etherscan')
-require('@nomiclabs/hardhat-web3')
-require('@openzeppelin/hardhat-upgrades')
+require("@nomiclabs/hardhat-etherscan");
+require("@nomiclabs/hardhat-web3");
+require("@openzeppelin/hardhat-upgrades");
 
-require('hardhat-gas-reporter')
-require('solidity-coverage')
-require('hardhat-contract-sizer')
+require("hardhat-gas-reporter");
+require("solidity-coverage");
+require("hardhat-contract-sizer");
 
 require("hardhat-interface-generator");
-require('hardhat-deploy');
-const ethers = require('ethers')
-const {getAllChains} = require('./utils/chainsHelper')
+require("hardhat-deploy");
+const ethers = require("ethers");
+const { getAllChains } = require("./utils/chainsHelper");
 
+require("./tasks");
+const config = require("./config");
 
-require('./tasks')
-const config = require('./config')
-
-function getPrivateKeys () {
-  const privateKeys = config.PRIVATE_KEYS
+function getPrivateKeys() {
+  const privateKeys = config.PRIVATE_KEYS;
   // if(Object.keys(privateKeys).length === 0){
   //   throw new Error("Please provide private keys in privateKeys.json file for setup")
   // }
-  const privateKeysArray = []
+  const privateKeysArray = [];
 
   for (const [, value] of Object.entries(privateKeys)) {
-    privateKeysArray.push(value)
+    privateKeysArray.push(value);
   }
-  return privateKeysArray
+  return privateKeysArray;
 }
 
-function getNamedAccounts () {
-  const privateKeys = config.PRIVATE_KEYS
+function getNamedAccounts() {
+  const privateKeys = config.PRIVATE_KEYS;
   // if(Object.keys(privateKeys).length === 0){
   //   throw new Error("Please provide private keys in privateKeys.json file for setup")
   // }
-  const privateKeysObject = {}
+  const privateKeysObject = {};
 
   for (const [name, value] of Object.entries(privateKeys)) {
-    privateKeysObject[name] = {default : new ethers.Wallet(value).address}
+    privateKeysObject[name] = { default: new ethers.Wallet(value).address };
   }
-  return privateKeysObject
+  return privateKeysObject;
 }
 
 function getNetworks() {
   let networks = {
-    "8545": {
+    8545: {
       url: "http://127.0.0.1:8545",
-      accounts: getPrivateKeys()
-    }
-  }
+      accounts: getPrivateKeys(),
+    },
+  };
 
-  const evmChainsData = getAllChains()
-  for (let i =0 ; i < evmChainsData.length ; i++) {
-    const chain = evmChainsData[i]
-    const chainId = chain.chainId
-    if(chain.rpc && chain.rpc.length > 0) {
+  const evmChainsData = getAllChains();
+  for (let i = 0; i < evmChainsData.length; i++) {
+    const chain = evmChainsData[i];
+    const chainId = chain.chainId;
+    if (chain.rpc && chain.rpc.length > 0) {
       networks[chainId.toString()] = {
         url: chain.rpc[0],
-        accounts: getPrivateKeys()
-      }
+        accounts: getPrivateKeys(),
+      };
     }
   }
 
-  return networks
-
+  return networks;
 }
-
 
 module.exports = {
   solidity: {
-    compilers:[
-    {
-        version: '0.8.4',
+    compilers: [
+      {
+        version: "0.8.4",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200
+            runs: 200,
           },
           viaIR: true,
         },
-    },
-    {
-      version: '0.8.9',
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
+      },
+      {
+        version: "0.8.9",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          viaIR: true,
         },
-        viaIR: true,
-      }
-    },
-    
-    {
-      version: '0.8.17',
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
+      },
+
+      {
+        version: "0.8.17",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          viaIR: true,
         },
-        viaIR: true,
-      }
-    },
-    {
-      version: '0.8.15',
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
+      },
+      {
+        version: "0.8.15",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          viaIR: true,
         },
-        viaIR: true,
-      }
-    },
-    {
-      version: '0.8.20',
-      settings: {
-        optimizer: {
-          enabled: true,
-          runs: 200
+      },
+      {
+        version: "0.8.20",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+          viaIR: true,
         },
-        viaIR: true,
-      }
-    }     
-    ]
+      },
+    ],
   },
   networks: getNetworks(),
   gasReporter: {
     enabled: config.REPORT_GAS,
-    currency: 'USD'
+    currency: "USD",
   },
 
   etherscan: {
@@ -141,9 +138,9 @@ module.exports = {
       celo_mainnet: config.CELOSCAN_API_KEY,
       mantle_testnet: config.MANTLESCAN_API_KEY,
       zkevm_testnet: config.ZKEVMSCAN_API_KEY,
-      scroll_testnet : config.SCROLLSCAN_API_KEY,
+      scroll_testnet: config.SCROLLSCAN_API_KEY,
       avalancheFujiTestnet: "snowtrace",
-      '84532': config.BASESCAN_API_KEY,
+      84532: config.BASESCAN_API_KEY,
     },
     customChains: [
       {
@@ -151,16 +148,15 @@ module.exports = {
         chainId: 84532,
         urls: {
           apiURL: "https://api-sepolia.basescan.org/api",
-          browserURL: "https://sepolia.basescan.org/"
-        }
-      }
-    ]
-
+          browserURL: "https://sepolia.basescan.org/",
+        },
+      },
+    ],
   },
 
   namedAccounts: getNamedAccounts(),
 
   mocha: {
-    timeout: 500000
-  }
-}
+    timeout: 500000,
+  },
+};

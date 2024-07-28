@@ -7,8 +7,8 @@ import { useAccount, useChainId } from "wagmi";
 
 import { Footer, Header } from "@/components";
 import LoadingScreen from "@/components/MainPane/components/LoadingScreen";
-import {NftCard} from "@/components/NftCard";
-import {SideBar} from "@/components/Sidebar";
+import { NftCard } from "@/components/NftCard";
+import { SideBar } from "@/components/Sidebar";
 import { ERC20ABI, TOKEN_TREAT_ABI, TOKEN_TREAT_CONTRACT_ADDRESS } from "@/config";
 import { getDefaultEthersSigner } from "@/utils/clientToEtherjsSigner";
 import { convertToUnixTimestamp, formatUnixTimestamp } from "@/utils/timeUtils";
@@ -24,7 +24,7 @@ export default function MyTreats() {
   const TREAT_STATUS: { [key: string]: any } = {
     "1": "ACTIVE",
     "2": "CLAIMED",
-    "3": "EXPIRED"
+    "3": "EXPIRED",
   };
 
   const getTokenData = async (treatToken: string) => {
@@ -49,31 +49,37 @@ export default function MyTreats() {
 
   useEffect(() => {
     const fetchTreats = async () => {
-      console.log(account.isConnecting)
+      console.log(account.isConnecting);
 
-      if(account.isConnecting) return;
+      if (account.isConnecting) return;
       setIsLoading(true);
       console.log("Fetching Treats");
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(tokenTreatContractAddress, TOKEN_TREAT_ABI, signer);
+      const tokenTreatContract = new ethers.Contract(
+        tokenTreatContractAddress,
+        TOKEN_TREAT_ABI,
+        signer,
+      );
       const treats = [];
       const myTreats = await tokenTreatContract.getAllTreatsOfOwner(account.address);
       console.log(myTreats);
       for (let i = 0; i < myTreats.length; i++) {
         const treat = await tokenTreatContract.getTreatInfo(myTreats[i]);
         const { tokenDecimals, tokenSymbol } = await getTokenData(treat.treatData.tokenAddress);
-        const treatMetadataRes = await fetch(treat.tokenUri.replace("ipfs://", "https://gateway.lighthouse.storage/ipfs/"));
+        const treatMetadataRes = await fetch(
+          treat.tokenUri.replace("ipfs://", "https://gateway.lighthouse.storage/ipfs/"),
+        );
         console.log("Treat Metadata Response:", treatMetadataRes);
         const treatMetadata = await treatMetadataRes.json();
         console.log("Treat Metadata:", treatMetadata);
 
-        let treatStatus = TREAT_STATUS[treat.treatData.status.toString()]
-        if(treatStatus === "ACTIVE"){
-          console.log(Number(treat.treatData.expiry))
-          console.log(convertToUnixTimestamp(Date.now()))
-          if(Number(treat.treatData.expiry) < convertToUnixTimestamp(Date.now())){
-            console.log("expired")
-            treatStatus = "EXPIRED"
+        let treatStatus = TREAT_STATUS[treat.treatData.status.toString()];
+        if (treatStatus === "ACTIVE") {
+          console.log(Number(treat.treatData.expiry));
+          console.log(convertToUnixTimestamp(Date.now()));
+          if (Number(treat.treatData.expiry) < convertToUnixTimestamp(Date.now())) {
+            console.log("expired");
+            treatStatus = "EXPIRED";
           }
         }
 
@@ -85,7 +91,7 @@ export default function MyTreats() {
           treatStatus,
           treatDescription: treat.treatData.treatMetadata,
           transferable: treat.treatData.transferable,
-          treatMetadata
+          treatMetadata,
         };
 
         console.log("Treat Object:", treatObject);
@@ -101,7 +107,9 @@ export default function MyTreats() {
     <Flex flexDirection="column" minHeight="100vh" bg="gray.50">
       <LoadingScreen isLoading={isLoading} />
       <Header />
-      <Text align="center" fontSize="4xl" my={6} color="purple.700">My Claimable Treats</Text>
+      <Text align="center" fontSize="4xl" my={6} color="purple.700">
+        My Claimable Treats
+      </Text>
       <Flex>
         <SideBar />
         <Box as="main" flex={1} p={6} ml="250px">
@@ -109,8 +117,11 @@ export default function MyTreats() {
             {myTreats.map((treat: any) => (
               <NftCard
                 key={treat.nftId}
-                title={treat.treatMetadata.name+ "#" +treat.nftId}
-                imageUrl={treat.treatMetadata.image.replace('ipfs://', 'https://gateway.lighthouse.storage/ipfs/')}
+                title={treat.treatMetadata.name + "#" + treat.nftId}
+                imageUrl={treat.treatMetadata.image.replace(
+                  "ipfs://",
+                  "https://gateway.lighthouse.storage/ipfs/",
+                )}
                 description={treat.treatMetadata.description}
                 amount={`${treat.treatAmount} ${treat.treatCurrencySymbol}`}
                 status={treat.treatStatus}

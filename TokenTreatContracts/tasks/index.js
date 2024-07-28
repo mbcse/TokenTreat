@@ -1,7 +1,7 @@
-const accounts = require('./accounts')
-const balance = require('./balance')
+const accounts = require("./accounts");
+const balance = require("./balance");
 
 module.exports = {
   accounts,
-  balance
-}
+  balance,
+};

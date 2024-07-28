@@ -8,7 +8,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
 
 const open_sans = Open_Sans({ subsets: ["latin"] });
-import '@coinbase/onchainkit/styles.css';
+import "@coinbase/onchainkit/styles.css";
 
 export const metadata: Metadata = {
   title: "TokenTreat",

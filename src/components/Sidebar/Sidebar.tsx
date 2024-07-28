@@ -1,5 +1,5 @@
 import { Box, VStack, Link, Text, Icon } from "@chakra-ui/react";
-import NextLink from 'next/link';
+import NextLink from "next/link";
 import { FaCookieBite, FaPlusCircle } from "react-icons/fa";
 
 const Sidebar: React.FC = () => {
@@ -20,20 +20,24 @@ const Sidebar: React.FC = () => {
           <Link
             display="flex"
             alignItems="center"
-            _hover={{ textDecoration: 'none', color: 'yellow.300' }}
+            _hover={{ textDecoration: "none", color: "yellow.300" }}
           >
             <Icon as={FaCookieBite} mr={3} />
-            <Text fontSize="lg" fontWeight="bold">My Treats</Text>
+            <Text fontSize="lg" fontWeight="bold">
+              My Treats
+            </Text>
           </Link>
         </NextLink>
         <NextLink href="/my-treat-dashboard/created-treats" passHref>
           <Link
             display="flex"
             alignItems="center"
-            _hover={{ textDecoration: 'none', color: 'yellow.300' }}
+            _hover={{ textDecoration: "none", color: "yellow.300" }}
           >
             <Icon as={FaPlusCircle} mr={3} />
-            <Text fontSize="lg" fontWeight="bold">My Created Treats</Text>
+            <Text fontSize="lg" fontWeight="bold">
+              My Created Treats
+            </Text>
           </Link>
         </NextLink>
       </VStack>

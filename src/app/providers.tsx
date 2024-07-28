@@ -3,10 +3,10 @@ import { type ReactNode, useState, useEffect } from "react";
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
-import { OnchainKitProvider } from '@coinbase/onchainkit';
+import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { baseSepolia } from 'viem/chains';
+import { baseSepolia } from "viem/chains";
 import { WagmiProvider } from "wagmi";
 
 import { wagmiConfig } from "@/wagmi";
@@ -30,13 +30,12 @@ export function Providers({ children }: Readonly<{ children: ReactNode }>) {
         <CacheProvider>
           <ChakraProvider resetCSS theme={theme}>
             <RainbowKitProvider coolMode appInfo={appInfo}>
-            <OnchainKitProvider
-              apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-              chain={baseSepolia}
-            >
-              {mounted && children}
+              <OnchainKitProvider
+                apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+                chain={baseSepolia}
+              >
+                {mounted && children}
               </OnchainKitProvider>
-
             </RainbowKitProvider>
           </ChakraProvider>
         </CacheProvider>

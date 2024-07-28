@@ -12,9 +12,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import type { Transport } from "viem";
 import { createConfig, http } from "wagmi";
-import {
-  baseSepolia,
-} from "wagmi/chains";
+import { baseSepolia } from "wagmi/chains";
 
 import linea_logo from "../public/img/linea_logo.png";
 import lineaTesnet_logo from "../public/img/lineaTesnet_logo.png";
@@ -51,17 +49,12 @@ const connectors = connectorsForWallets(
 
 const transports: Record<number, Transport> = {
   [baseSepolia.id]: http(),
-  
 };
 
-console.log(baseSepolia)
+console.log(baseSepolia);
 export const wagmiConfig = createConfig({
-  chains: [
-    baseSepolia
-  ],
+  chains: [baseSepolia],
   connectors,
   transports,
   ssr: true,
 });
-
-

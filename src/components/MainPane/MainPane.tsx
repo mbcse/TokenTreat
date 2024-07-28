@@ -31,15 +31,13 @@ const MainPane: FC = () => {
       </Heading>
 
       <Heading as="h6" fontSize={"1rem"} mb={10} className="text-shadow">
-        <Text color="orange.500">Ephemeral/Consumable nfts on base!</Text>
+        <Text color="orange.500">Ephemeral/Consumable nfts on Blockchain!</Text>
       </Heading>
-
-      
 
       <Flex className={styles.content}>
         {/* <Status /> */}
 
-        {isConnected? (
+        {isConnected ? (
           <>
             <Address />
 
@@ -58,11 +56,9 @@ const MainPane: FC = () => {
               <CreateTokenTreat />
             </Flex>
           </>
-        ): (
+        ) : (
           <Text>Connect to a wallet to create a TokenTreat</Text>
-        )
-        
-        }
+        )}
       </Flex>
     </Box>
   );
