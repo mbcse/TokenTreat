@@ -1,11 +1,12 @@
 const { artifacts, ethers, upgrades } = require("hardhat");
-const getNamedSigners = require("../utils/getNamedSigners");
-const saveToConfig = require("../utils/saveToConfig");
-const readFromConfig = require("../utils/readFromConfig");
+
 const deploySettings = require("./deploySettings");
-const deployContract = require("../utils/deployContract");
 const { getChain } = require("../utils/chainsHelper");
+const deployContract = require("../utils/deployContract");
 const deployUpgradableContract = require("../utils/deployUpgradableContract");
+const getNamedSigners = require("../utils/getNamedSigners");
+const readFromConfig = require("../utils/readFromConfig");
+const saveToConfig = require("../utils/saveToConfig");
 const verifyUpgradableContract = require("../utils/verifyUpgradableContract");
 
 const getDeployHelpers = async () => {
@@ -30,7 +31,7 @@ async function main() {
     hre,
     "contracts/TokenTreat.sol:TokenTreat",
     deployedAddress,
-    "84532",
+    deployHelpers.chainId,
   );
 }
 

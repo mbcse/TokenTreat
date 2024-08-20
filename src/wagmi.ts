@@ -10,13 +10,29 @@ import {
   safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import type { Transport } from "viem";
+import type { Transport, Chain } from "viem";
 import { createConfig, http } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
 
-import linea_logo from "../public/img/linea_logo.png";
-import lineaTesnet_logo from "../public/img/lineaTesnet_logo.png";
-import zksync_logo from "../public/img/zksync_logo.svg";
+
+const coreChain: Chain = {
+  id: 1115,
+  name: 'Core Blockchain',
+  nativeCurrency: {
+    name: 'TCORE',
+    symbol: 'TCORE',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.test.btcs.network'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Core Explorer', url: 'https://scan.test.btcs.network' },
+  },
+  testnet: true,
+};
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 
@@ -48,12 +64,12 @@ const connectors = connectorsForWallets(
 // Fix missing icons
 
 const transports: Record<number, Transport> = {
-  [baseSepolia.id]: http(),
+  [coreChain.id]: http(),
 };
 
 console.log(baseSepolia);
 export const wagmiConfig = createConfig({
-  chains: [baseSepolia],
+  chains: [coreChain],
   connectors,
   transports,
   ssr: true,

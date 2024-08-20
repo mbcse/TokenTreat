@@ -7,12 +7,13 @@ import {
   useCallback,
 } from "react";
 
-import { Box, Button, Flex, Image, Input, Select, Text, VStack, useToken } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, HStack, Image, Input, Select, Spinner, Text, VStack, useToken } from "@chakra-ui/react";
 import { getAttestations } from "@coinbase/onchainkit/identity";
 import { TokenSearch, TokenSelectDropdown, getTokens } from "@coinbase/onchainkit/token";
 import type { Token } from "@coinbase/onchainkit/token";
 import axios from "axios";
 import { ethers } from "ethers";
+import { debounce } from 'lodash';
 import { baseSepolia } from "viem/chains";
 import { useAccount, useChainId, useReadContract, useWriteContract } from "wagmi";
 
@@ -20,7 +21,7 @@ import { TOKEN_TREAT_CONTRACT_ADDRESS, TOKEN_TREAT_ABI, ERC20ABI } from "@/confi
 import { useSignMessageHook, useNotify } from "@/hooks";
 import type { ContractAddress } from "@/types";
 import { getDefaultEthersSigner, getEthersSigner } from "@/utils/clientToEtherjsSigner";
-import { uploadFile, uploadJson } from "@/utils/ipfsHelper";
+import { uploadFile, uploadJson, urlToFile } from "@/utils/ipfsHelper";
 import { createMetaData } from "@/utils/nftHelpers";
 import { convertToUnixTimestamp } from "@/utils/timeUtils";
 
@@ -30,12 +31,11 @@ const CreateTokenTreat: FC = () => {
   const account = useAccount();
   const chainId = useChainId();
   const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
-
   const [treatName, setTreatName] = useState("");
   const [treatValue, setTreatValue] = useState("");
   const [treatType, setTreatType] = useState("");
   const [treatDescription, setTreatDescription] = useState("");
-  const [treatImage, setTreatImage] = useState<FileList | null>(null);
+  const [treatImage, setTreatImage] = useState<FileList | null | unknown>(null);
   const [treatValidity, setTreatValidity] = useState("");
   const [treatToken, setTreatToken] = useState("");
   const [burnOnClaims, setburnOnClaim] = useState("");
@@ -50,14 +50,16 @@ const CreateTokenTreat: FC = () => {
 
   const [imagePromtUrl, setImagePromtUrl] = useState("");
 
+  const [fetchingImage, setFetchingImage] = useState(false);
+
   const [selectTokenList, setSelectTokenList] = useState([
     {
-      name: "Ethereum",
+      name: "TCORE",
       address: "0x0000000000000000000000000000000000000000",
-      symbol: "ETH",
+      symbol: "TCORE",
       decimals: 18,
-      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
-      chainId: 8453,
+      image: "https://coredao.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flight.2e337d5a.png&w=256&q=75",
+      chainId: 1115,
     },
     {
       name: "USDC",
@@ -66,17 +68,8 @@ const CreateTokenTreat: FC = () => {
       decimals: 6,
       image:
         "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213-ZWUzYjJmZGUtMDYxNy00NDcyLTg0NjQtMWI4OGEwYjBiODE2",
-      chainId: 8453,
-    },
-    {
-      name: "Dai",
-      address: "0x4e64812e093167EbA03b829284C1C959CC28DA72",
-      symbol: "DAI",
-      decimals: 18,
-      image:
-        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/d0/d7/d0d7784975771dbbac9a22c8c0c12928cc6f658cbcf2bbbf7c909f0fa2426dec-NmU4ZWViMDItOTQyYy00Yjk5LTkzODUtNGJlZmJiMTUxOTgy",
-      chainId: 8453,
-    },
+      chainId: 1115,
+    }
   ]);
 
   const [selectTreatToken, setSelectTreatToken] = useState("");
@@ -90,7 +83,7 @@ const CreateTokenTreat: FC = () => {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "ETH";
+      tokenSymbol = "TCORE";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);
@@ -105,6 +98,8 @@ const CreateTokenTreat: FC = () => {
   };
 
   const checkAndSetAmounts = async () => {
+    console.log("chainid", chainId, tokenTreatContractAddress)
+
     if (!treatValue || treatValue === "" || !treatToken || treatToken === "") return;
     const signer = await getDefaultEthersSigner();
 
@@ -213,7 +208,8 @@ const CreateTokenTreat: FC = () => {
 
   const { notifyError, notifySuccess } = useNotify();
 
-  const createImage = async () => {
+  const createImage = async (imagePromtPassed?: string) => {
+    setFetchingImage(true);
     const options = {
       method: "POST",
       url: "/api/corcel",
@@ -223,7 +219,7 @@ const CreateTokenTreat: FC = () => {
         Authorization: "3ff413ba-70e0-4e3b-9de4-ec02b21525e1",
       },
       data: {
-        imagePromt: imagePromt,
+        imagePromt: imagePromtPassed || imagePromt ,
       },
     };
 
@@ -231,14 +227,30 @@ const CreateTokenTreat: FC = () => {
     console.log(response.data);
     setImagePromtUrl(response.data[0].image_url);
     console.log(imagePromtUrl);
+    const file = await urlToFile(response.data[0].image_url, "nft-img", "png");
+    setTreatImage(file);
+    setFetchingImage(false);
     return response.data;
   };
 
+  const debouncedFetchResults = useCallback(debounce((promt)=> createImage(promt), 5000), []);
+
+  // useEffect(() => {
+  //   if (imagePromt && imagePromt !== "") {
+  //     createImage();
+  //   }
+  // }, [imagePromt]);
+
   useEffect(() => {
-    if (imagePromt && imagePromt !== "") {
-      createImage();
-    }
-  }, [imagePromt]);
+    setFetchingImage(true)
+  },[imagePromt])
+
+  const handlePromtChange = (e: any) => {
+    const { value } = e.target;
+    setImagePromt(value);
+    console.log(imagePromt)
+    debouncedFetchResults(value);
+  };
 
   const createTreat = async () => {
     setIsLoading(true);
@@ -268,7 +280,7 @@ const CreateTokenTreat: FC = () => {
         }
       }
 
-      const treatImageHash = await uploadFile(imagePromtUrl);
+      const treatImageHash = await uploadFile(treatImage);
       console.log(treatImageHash);
       const metadata = createMetaData(
         treatImageHash,
@@ -322,18 +334,69 @@ const CreateTokenTreat: FC = () => {
     }
   };
 
-  useEffect(() => {}, [notifyError, notifySuccess]);
+  useEffect(() => {
+    
+  }, [notifyError, notifySuccess]);
 
   return (
+
+    <>
+
+<Flex w={"100%"} display={"flex"} justifyContent={"center"} alignContent={"center"} flexWrap={"wrap"} gap={0}>
+
+{imagePromtUrl && (
+        <Box boxSize="sm" className="ml-4">
+           {fetchingImage? (<Center
+      top="0"
+      left="0"
+      width="100%"
+      height="100%"
+      bg="rgba(0, 0, 0, 0.5)"
+      // zIndex="1000"
+    >
+      <Spinner size="xl" />
+      <Text marginLeft={2}>Fetching Image using AI</Text>
+    </Center>): (<Image src={URL.createObjectURL(treatImage[0] as any)} alt="Selected Image" boxSize="100%" objectFit="cover" />)}
+        </Box>
+      )}
+<Flex direction="column" align="start" w="100%">
+          <Text fontSize="md" fontWeight="medium">Select NFT Image</Text>
+          <Text fontSize="sm" color="gray.500" mb={2}>Choose one of the following options to set an image for your NFT.</Text>
+          <VStack spacing={4} w="100%">
+            <Box w="100%">
+              <Text fontSize="sm" color="gray.600">Input an AI prompt:</Text>
+              <Input
+                placeholder="Enter AI prompt"
+                value={imagePromt}
+                onChange={(e) => handlePromtChange(e)}
+                mb={2}
+              />
+              {/* {imagePromtUrl && (
+                <Image src={imagePromtUrl} alt="AI generated image" boxSize="100px" mt={2} />
+              )} */}
+
+              OR
+            </Box>
+            <Box w="100%">
+              <Text fontSize="sm" color="gray.600">Upload an image from your computer:</Text>
+              <Input
+                type="file"
+                onChange={(e) => setTreatImage(e.target.files)}
+                mb={2}
+              />
+              {/* {treatImage && (
+                <Image src={URL.createObjectURL(treatImage[0])} alt="Uploaded image" boxSize="100px" mt={2} />
+              )} */}
+            </Box>
+          </VStack>
+        </Flex>
+    </Flex>
+
+ 
     <Flex w={"100%"} display={"flex"} justifyContent={"space-around"} flexWrap={"wrap"} gap={5}>
       <LoadingScreen isLoading={isLoading} />
 
-      {imagePromtUrl && (
-        <Box boxSize="sm">
-          <Image src={imagePromtUrl} alt="Selected Image" boxSize="100%" objectFit="cover" />
-          Powered By Corcel AI
-        </Box>
-      )}
+      
 
       <VStack w={"45%"} minWidth={"270px"} gap={2}>
         <Text textAlign="left" fontWeight="bold">
@@ -439,7 +502,7 @@ const CreateTokenTreat: FC = () => {
         />
       </VStack>
 
-      <VStack w={"45%"} minWidth={"270px"} gap={2} textAlign="left">
+      {/* <VStack w={"45%"} minWidth={"270px"} gap={2} textAlign="left">
         <Text textAlign="left" fontWeight="bold">
           NFT Image Promt
         </Text>
@@ -451,7 +514,7 @@ const CreateTokenTreat: FC = () => {
         />
       </VStack>
 
-      {/* <VStack w={"45%"} minWidth={"270px"} gap={2} textAlign="left">
+      <VStack w={"45%"} minWidth={"270px"} gap={2} textAlign="left">
         <Text textAlign="left" fontWeight="bold">Treat Image</Text>
         <Input
           onChange={(e) => setTreatImage(e?.target?.files)}
@@ -537,6 +600,10 @@ const CreateTokenTreat: FC = () => {
         </Button>
       </VStack>
     </Flex>
+
+
+
+    </>
   );
 };
 
