@@ -31,6 +31,7 @@ export default function CreatedTreats() {
 
   const account = useAccount();
   const chainId = useChainId();
+  console.log(chainId)
   const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
 
   const [myCreatedTreats, setMyCreatedTreats] = useState<any>([]);
@@ -77,7 +78,7 @@ export default function CreatedTreats() {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "ETH";
+      tokenSymbol = "BNB";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);

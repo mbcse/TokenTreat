@@ -12,27 +12,9 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import type { Transport, Chain } from "viem";
 import { createConfig, http } from "wagmi";
-import { baseSepolia } from "wagmi/chains";
+import { opBNBTestnet } from "wagmi/chains";
 
 
-const coreChain: Chain = {
-  id: 1115,
-  name: 'Core Blockchain',
-  nativeCurrency: {
-    name: 'TCORE',
-    symbol: 'TCORE',
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.test.btcs.network'],
-    },
-  },
-  blockExplorers: {
-    default: { name: 'Core Explorer', url: 'https://scan.test.btcs.network' },
-  },
-  testnet: true,
-};
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 
@@ -64,12 +46,11 @@ const connectors = connectorsForWallets(
 // Fix missing icons
 
 const transports: Record<number, Transport> = {
-  [coreChain.id]: http(),
+  [opBNBTestnet.id]: http(),
 };
 
-console.log(baseSepolia);
 export const wagmiConfig = createConfig({
-  chains: [coreChain],
+  chains: [opBNBTestnet],
   connectors,
   transports,
   ssr: true,

@@ -16,6 +16,7 @@ import { convertToUnixTimestamp, formatUnixTimestamp } from "@/utils/timeUtils";
 export default function MyTreats() {
   const account = useAccount();
   const chainId = useChainId();
+  console.log(chainId)
   const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
 
   const [myTreats, setMyTreats] = useState<any>([]);
@@ -34,7 +35,7 @@ export default function MyTreats() {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "ETH";
+      tokenSymbol = "BNB";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);

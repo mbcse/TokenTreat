@@ -54,21 +54,31 @@ const CreateTokenTreat: FC = () => {
 
   const [selectTokenList, setSelectTokenList] = useState([
     {
-      name: "TCORE",
+      name: "BNB",
       address: "0x0000000000000000000000000000000000000000",
-      symbol: "TCORE",
+      symbol: "BNB",
       decimals: 18,
-      image: "https://coredao.org/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flight.2e337d5a.png&w=256&q=75",
-      chainId: 1115,
+      image: "https://www.iconarchive.com/download/i109472/cjdowner/cryptocurrency-flat/Binance-Coin-BNB.1024.png",
+      chainId: 5611,
+    },
+    ,
+    {
+      name: "STONE",
+      address: "0xE31861dbB1608066Edea809a2E3c2a078ae1c9Bc",
+      symbol: "STONE",
+      decimals: 18,
+      image:
+        "data:image/png;base64,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",
+      chainId: 5611,
     },
     {
-      name: "USDC",
-      address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-      symbol: "USDC",
-      decimals: 6,
+      name: "BUSD",
+      address: "0xa9ad1484d9bfb27adbc2bf50a6e495777cc8cff2",
+      symbol: "BUSD",
+      decimals: 18,
       image:
-        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213-ZWUzYjJmZGUtMDYxNy00NDcyLTg0NjQtMWI4OGEwYjBiODE2",
-      chainId: 1115,
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx-TMU0n9SG4ZriUh0Gij2Td6Xu6pXhmK8lg&s",
+      chainId: 5611,
     }
   ]);
 
@@ -83,7 +93,7 @@ const CreateTokenTreat: FC = () => {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "TCORE";
+      tokenSymbol = "BNB";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);
