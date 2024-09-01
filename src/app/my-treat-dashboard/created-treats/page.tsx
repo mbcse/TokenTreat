@@ -32,7 +32,7 @@ export default function CreatedTreats() {
   const account = useAccount();
   const chainId = useChainId();
   console.log(chainId)
-  const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
+  const EduTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
 
   const [myCreatedTreats, setMyCreatedTreats] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +47,14 @@ export default function CreatedTreats() {
     try {
       setIsLoading(true);
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
       console.log("hello");
       console.log(nftId);
-      const claimTx = await tokenTreatContract.burnTreat(nftId);
+      const claimTx = await EduTreatContract.burnTreat(nftId);
       console.log(claimTx);
       await claimTx.wait();
       notifySuccess({
@@ -78,7 +78,7 @@ export default function CreatedTreats() {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "BNB";
+      tokenSymbol = "EDU";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);
@@ -98,18 +98,18 @@ export default function CreatedTreats() {
       setIsLoading(true);
       console.log("Fetching Treats");
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
       const treats = [];
-      const myTreats = await tokenTreatContract.getIssuedTreats(account.address);
+      const myTreats = await EduTreatContract.getIssuedTreats(account.address);
       console.log(myTreats);
       for (let i = 0; i < myTreats.length; i++) {
-        const treat = await tokenTreatContract.getTreatInfo(myTreats[i]);
+        const treat = await EduTreatContract.getTreatInfo(myTreats[i]);
         console.log("hello1");
-        const treatOwner = await tokenTreatContract.ownerOf(myTreats[i]);
+        const treatOwner = await EduTreatContract.ownerOf(myTreats[i]);
         console.log("hello2");
 
         const { tokenDecimals, tokenSymbol } = await getTokenData(treat.treatData.tokenAddress);

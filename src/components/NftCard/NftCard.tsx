@@ -46,7 +46,7 @@ const NftCard: React.FC<{
   console.log(nftId);
   const account = useAccount();
   const chainId = useChainId();
-  const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
+  const EduTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<any>();
@@ -56,14 +56,14 @@ const NftCard: React.FC<{
     try {
       setIsLoading(true);
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
       console.log("hello");
       console.log(nftId);
-      const claimTx = await tokenTreatContract.claimTreat(nftId);
+      const claimTx = await EduTreatContract.claimTreat(nftId);
       console.log(claimTx);
       await claimTx.wait();
       notifySuccess({
@@ -82,12 +82,12 @@ const NftCard: React.FC<{
     try {
       setIsLoading(true);
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
-      const claimTx = await tokenTreatContract.claimTreatAtAddress(nftId, claimAddress);
+      const claimTx = await EduTreatContract.claimTreatAtAddress(nftId, claimAddress);
       console.log(claimTx);
       await claimTx.wait();
       notifySuccess({
@@ -106,14 +106,14 @@ const NftCard: React.FC<{
     try {
       setIsLoading(true);
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
       console.log("hello");
       console.log(nftId);
-      const claimTx = await tokenTreatContract.burnTreat(nftId);
+      const claimTx = await EduTreatContract.burnTreat(nftId);
       console.log(claimTx);
       await claimTx.wait();
       notifySuccess({

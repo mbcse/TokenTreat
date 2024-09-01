@@ -15,7 +15,7 @@ import {
   TransferNative,
   SignMessage,
 } from "./components";
-import CreateTokenTreat from "./components/CreateTokenTreat";
+import CreateEduTreat from "./components/CreateEduTreat";
 
 const MainPane: FC = () => {
   const { isConnected } = useAccount();
@@ -27,7 +27,7 @@ const MainPane: FC = () => {
       border={colorMode === "light" ? "none" : "1px solid rgba(152, 161, 192, 0.24)"}
     >
       <Heading as="h2" fontSize={"2rem"} mb={1} className="text-shadow">
-        Create a TokenTreat
+        Create a EduTreat
       </Heading>
 
       <Heading as="h6" fontSize={"1rem"} mb={10} className="text-shadow">
@@ -53,11 +53,11 @@ const MainPane: FC = () => {
               {/* <SignMessage />
               <TransferNative /> */}
 
-              <CreateTokenTreat />
+              <CreateEduTreat />
             </Flex>
           </>
         ) : (
-          <Text>Connect to a wallet to create a TokenTreat</Text>
+          <Text>Connect to a wallet to create a EduTreat</Text>
         )}
       </Flex>
     </Box>

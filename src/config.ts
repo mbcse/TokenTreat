@@ -1151,7 +1151,7 @@ export const TOKEN_TREAT_ABI = [
             type: "address",
           },
           {
-            internalType: "enum TokenTreat.TreatStatus",
+            internalType: "enum EduTreat.TreatStatus",
             name: "status",
             type: "uint8",
           },
@@ -1176,7 +1176,7 @@ export const TOKEN_TREAT_ABI = [
             type: "bool",
           },
         ],
-        internalType: "struct TokenTreat.TreatInfo",
+        internalType: "struct EduTreat.TreatInfo",
         name: "treatData",
         type: "tuple",
       },
@@ -1743,7 +1743,7 @@ export const TOKEN_TREAT_ABI = [
         type: "address",
       },
       {
-        internalType: "enum TokenTreat.TreatStatus",
+        internalType: "enum EduTreat.TreatStatus",
         name: "status",
         type: "uint8",
       },
@@ -1862,5 +1862,6 @@ export const TOKEN_TREAT_CONTRACT_ADDRESS  = {
   1115: "0xF6b29cF96471e9bfbBb52623395759CA948f4554",
   4157: "0xF6b29cF96471e9bfbBb52623395759CA948f4554",
   97: "0x861f2dEC687b837680382C22E0cF8fc845419441",
-  5611: "0xF6b29cF96471e9bfbBb52623395759CA948f4554"
+  5611: "0xF6b29cF96471e9bfbBb52623395759CA948f4554",
+  656476: "0x5253469Bd4f16A70B9b86aE0fF51Bb3369E51952"
 };

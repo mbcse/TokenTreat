@@ -1,9 +1,9 @@
-TokenTreat(Ephemeral NFT's on Base)
+EduTreat(Ephemeral NFT's on Base)
 
-![Alt Text](./TokenTreat.jpg)
+![Alt Text](./EduTreat.jpg)
 
 ## Overview
-TokenTreat brings ephemeral NFTs to the Base blockchain, allowing NFTs to have expiration dates and enabling a wide range of new use cases such as discount coupons, certificates, and giveaways. Traditional NFTs lack the capability to expire automatically, which usually requires a central authority to manage and burn expired tokens. TokenTreat addresses this issue by introducing a modified ERC-721 standard that includes expiration logic and a decentralized burn mechanism.
+EduTreat brings ephemeral NFTs to the Base blockchain, allowing NFTs to have expiration dates and enabling a wide range of new use cases such as discount coupons, certificates, and giveaways. Traditional NFTs lack the capability to expire automatically, which usually requires a central authority to manage and burn expired tokens. EduTreat addresses this issue by introducing a modified ERC-721 standard that includes expiration logic and a decentralized burn mechanism.
 
 ## Key Features
 - Ephemeral NFTs: NFTs with built-in expiration dates that automatically trigger burn operations when they expire.
@@ -18,7 +18,7 @@ TokenTreat brings ephemeral NFTs to the Base blockchain, allowing NFTs to have e
 2. Claim and Redeem: Recipients can claim the NFTs, unlocking the associated tokens upon claiming.
 3. Burn Expired NFTs: Once the expiration date is reached, any user can burn the expired NFTs via the burn marketplace and receive rewards.
 
-Visit the TokenTreat platform to create and manage your ephemeral NFTs. The platform provides a dashboard to track claimable treats, monitor expirations, and manage burns. Experience the full functionality by issuing discount coupons, giveaways, and more.
+Visit the EduTreat platform to create and manage your ephemeral NFTs. The platform provides a dashboard to track claimable treats, monitor expirations, and manage burns. Experience the full functionality by issuing discount coupons, giveaways, and more.
 
 ## Video Demo
 https://www.loom.com/share/40772a3aeec7438eba60613fa8653669?sid=f1bf9a04-0ea7-4638-8323-38acb9903022

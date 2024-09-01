@@ -11,8 +11,8 @@ const open_sans = Open_Sans({ subsets: ["latin"] });
 import "@coinbase/onchainkit/styles.css";
 
 export const metadata: Metadata = {
-  title: "TokenTreat",
-  applicationName: "TokenTreat",
+  title: "EduTreat",
+  applicationName: "EduTreat",
   description: "Create coupons/cards and treat the world with tokens",
   authors: {
     name: "Mohit",

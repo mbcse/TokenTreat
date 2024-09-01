@@ -21,7 +21,7 @@ export function Providers({ children }: Readonly<{ children: ReactNode }>) {
   const theme = extendTheme({ initialColorMode: "dark", useSystemColorMode: false });
 
   const appInfo = {
-    appName: "TokenTreat",
+    appName: "EduTreat",
   };
 
   return (

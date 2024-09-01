@@ -11,8 +11,8 @@ import { useAccount } from "wagmi";
 
 import { useWindowSize } from "@/hooks/useWindowSize";
 
+import EduTreat from "../../../public/img/EduTreat.png";
 import logo from "../../../public/img/logo_transparent.png";
-import TokenTreat from "../../../public/img/TokenTreat.svg";
 import { DarkModeButton } from "../DarkModeButton";
 
 const Header: FC = () => {
@@ -33,11 +33,11 @@ const Header: FC = () => {
       justifyContent={"space-between"}
     >
       <HStack>
-        <Image src={TokenTreat.src} alt="logo" width={45} height={45} />
+        <Image src={EduTreat.src} alt="logo" width={45} height={45} />
         {!isTablet && (
           <Link href={"/"}>
             <Heading as="h1" fontSize={"1.5rem"} className="text-shadow">
-              TokenTreat
+              EduTreat
             </Heading>
           </Link>
         )}

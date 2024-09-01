@@ -7,14 +7,14 @@ export const createMetaData = (
 ) => {
   return {
     description: description,
-    external_url: "https://tokentreat.xyz",
+    external_url: "https://EduTreat.xyz",
     image: imageUri,
-    name: "TokenTreat",
+    name: "EduTreat",
     background_color: "000000",
     attributes: [
       {
         trait_type: "issuer",
-        value: "TokenTreat",
+        value: "EduTreat",
       },
       {
         trait_type: "treat_type",

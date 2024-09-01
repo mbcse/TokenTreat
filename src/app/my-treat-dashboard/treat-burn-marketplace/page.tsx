@@ -17,7 +17,7 @@ export default function MyTreats() {
   const account = useAccount();
   const chainId = useChainId();
   console.log(chainId)
-  const tokenTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
+  const EduTreatContractAddress = TOKEN_TREAT_CONTRACT_ADDRESS[chainId];
 
   const [myTreats, setMyTreats] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ export default function MyTreats() {
     let tokenSymbol = null;
     if (treatToken === "0x0000000000000000000000000000000000000000") {
       tokenDecimals = 18;
-      tokenSymbol = "BNB";
+      tokenSymbol = "EDU";
     } else {
       // Get token Contract
       tokenContract = new ethers.Contract(treatToken, ERC20ABI, signer);
@@ -55,19 +55,19 @@ export default function MyTreats() {
       setIsLoading(true);
       console.log("Fetching Treats");
       const signer = await getDefaultEthersSigner();
-      const tokenTreatContract = new ethers.Contract(
-        tokenTreatContractAddress,
+      const EduTreatContract = new ethers.Contract(
+        EduTreatContractAddress,
         TOKEN_TREAT_ABI,
         signer,
       );
       const treats = [];
-      const myTreatsCount = await tokenTreatContract.totalSupply();
+      const myTreatsCount = await EduTreatContract.totalSupply();
 
       console.log("My Treats Count:", myTreatsCount);
 
       for (let i = 0; i <= 10; i++) {
         try {
-          const treat = await tokenTreatContract.getTreatInfo(i);
+          const treat = await EduTreatContract.getTreatInfo(i);
           const { tokenDecimals, tokenSymbol } = await getTokenData(treat.treatData.tokenAddress);
           const treatMetadataRes = await fetch(
             treat.tokenUri.replace("ipfs://", "https://gateway.lighthouse.storage/ipfs/"),

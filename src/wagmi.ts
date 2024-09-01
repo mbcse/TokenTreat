@@ -12,9 +12,25 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import type { Transport, Chain } from "viem";
 import { createConfig, http } from "wagmi";
-import { opBNBTestnet } from "wagmi/chains";
 
-
+const eduChain: Chain = {
+  id: 656476,
+  name: 'EduChain Blockchain',
+  nativeCurrency: {
+    name: 'EDU',
+    symbol: 'EDU',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.open-campus-codex.gelato.digital'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'Edu Chain Explorer', url: 'https://opencampus-codex.blockscout.com/' },
+  },
+  testnet: true,
+};
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 
@@ -40,17 +56,17 @@ const connectors = connectorsForWallets(
       ],
     },
   ],
-  { appName: "TokenTreat", projectId: walletConnectProjectId },
+  { appName: "EduTreat", projectId: walletConnectProjectId },
 );
 
 // Fix missing icons
 
 const transports: Record<number, Transport> = {
-  [opBNBTestnet.id]: http(),
+  [eduChain.id]: http(),
 };
 
 export const wagmiConfig = createConfig({
-  chains: [opBNBTestnet],
+  chains: [eduChain],
   connectors,
   transports,
   ssr: true,
